@@ -14,6 +14,7 @@
               vscode-langservers-extracted
               (python311.withPackages(ps: with ps; [
                 flask
+                waitress
                 # add more python stuff here
               ]))
             ];

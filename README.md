@@ -8,7 +8,9 @@ nix develop
 ```
 
 Non Nix users, install:
-- flask (python3 package)
+- python3 packages
+  - flask
+  - waitress
 - vscode HTML LSP (optionally for code completions)
 
 ### Running
@@ -16,7 +18,7 @@ Non Nix users, install:
 Execute the following to spin up the server:
 
 ```bash
-flask --app main run
+python main.py
 ```
 
 Now visit http://localhost:5000
