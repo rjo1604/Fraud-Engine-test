@@ -1,0 +1,84 @@
+Database Schema
+ 
+1. FieldAgents
+Stores information about field agents.
+
+FieldAgentID (Primary Key): Unique identifier for each field agent.
+Name: Full name of the field agent.
+ContactNumber: Contact number for the field agent.
+Email: Email address of the field agent.
+AssignedRegion: Geographic region assigned to the field agent.
+
+2. Locations
+Stores information about the locations relevant to field agents.
+
+LocationID (Primary Key): Unique identifier for each location.
+Latitude: Latitude of the location.
+Longitude: Longitude of the location.
+Address: Address of the location.
+LocationType: Type of location (e.g., customer address, delinquent location).
+
+3. ScheduledVisits
+Stores scheduled visit information for field agents.
+
+VisitID (Primary Key): Unique identifier for each scheduled visit.
+FieldAgentID (Foreign Key): References FieldAgents.FieldAgentID.
+LocationID (Foreign Key): References Locations.LocationID.
+ScheduledDateTime: Date and time when the visit is scheduled.
+
+4. FieldAgentStops
+Records the actual stops made by field agents.
+
+StopID (Primary Key): Unique identifier for each stop.
+FieldAgentID (Foreign Key): References FieldAgents.FieldAgentID.
+LocationID (Foreign Key): References Locations.LocationID.
+StopDateTime: Date and time when the stop occurred.
+DataUpdated: Boolean indicating if the data for the customer was updated at this stop.
+
+5. FraudAlerts
+Stores generated fraud alerts based on rule violations.
+
+AlertID (Primary Key): Unique identifier for each fraud alert.
+FieldAgentID (Foreign Key): References FieldAgents.FieldAgentID.
+StopID (Foreign Key): References FieldAgentStops.StopID.
+AlertType: Type of fraud alert (e.g., location mismatch, data switch-off).
+AlertDateTime: Date and time when the alert was generated.
+Details: Additional details about the fraud alert.
+
+6. FraudRules
+Defines the rules used by the fraud engine to generate alerts.
+
+RuleID (Primary Key): Unique identifier for each fraud rule.
+RuleDescription: Description of the fraud rule.
+RuleCriteria: Criteria for the rule (e.g., stop location mismatch, no update in application).
+
+7. Payments
+Stores payment collection data.
+
+PaymentID (Primary Key): Unique identifier for each payment.
+FieldAgentID (Foreign Key): References FieldAgents.FieldAgentID.
+LocationID (Foreign Key): References Locations.LocationID.
+Amount: Amount collected.
+PaymentDateTime: Date and time of the payment.
+
+8. DelinquentCustomers
+Stores information about delinquent customers.
+
+CustomerID (Primary Key): Unique identifier for each customer.
+LocationID (Foreign Key): References Locations.LocationID.
+Status: Current status of the customer (e.g., delinquent, closed).
+LastUpdateDate: Date when the customer status was last updated.
+
+9. Patterns
+Records patterns in the field officer’s reporting.
+
+PatternID (Primary Key): Unique identifier for each pattern.
+FieldAgentID (Foreign Key): References FieldAgents.FieldAgentID.
+PatternDescription: Description of the observed pattern.
+PatternDateTime: Date and time when the pattern was observed.
+
+Example Relationships:
+FieldAgents have a one-to-many relationship with ScheduledVisits, FieldAgentStops, and Payments.
+Locations have a one-to-many relationship with ScheduledVisits, FieldAgentStops, Payments, and DelinquentCustomers.
+FieldAgentStops link to ScheduledVisits and FraudAlerts.
+FraudRules are used by the system to analyze FieldAgentStops and generate FraudAlerts.
